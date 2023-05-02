@@ -6,5 +6,5 @@ export type IBook = {
   language: string;
   pageCount: number;
   price: number;
-  id?: string;
+  id: string;
 };

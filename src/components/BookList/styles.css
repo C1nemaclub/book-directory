@@ -16,6 +16,13 @@
   background: #f8f8e6;
 }
 
+#customers td{
+  cursor: pointer;
+}
+#customers tr:hover{
+  background: #77c2ee;
+}
+
 #customers th,
 td {
   padding: 0.5em;

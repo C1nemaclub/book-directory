@@ -5,18 +5,25 @@ import bookService from '../services/bookService';
 
 export type InitialState = {
   books: IBook[];
+  totalBooks: number;
   loading: boolean;
   error: null | string;
 };
 
 export const initialState: InitialState = {
   books: [],
+  totalBooks: NaN,
   loading: false,
   error: null,
 };
 
 function useBooks() {
   const [state, dispatch] = useReducer(bookReducer, initialState);
+
+  useEffect(()=>{
+     dispatch({type: "SET_BOOKS_LENGTH"})
+  }, [state.books])
+
 
   const getBooks = async () => {
     try {
@@ -51,6 +58,7 @@ function useBooks() {
     }    
   }
 
+
   useEffect(() => {
     getBooks();
   }, []);
@@ -59,6 +67,7 @@ function useBooks() {
     getBooks,
     removeBook,
     addBook,
+    totalBooks: state.totalBooks,
     books: state.books,
     loading: state.loading,
     error: state.error,

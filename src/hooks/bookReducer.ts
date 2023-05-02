@@ -29,13 +29,18 @@ type ActionFailed = {
   payload: string | null;
 };
 
+type ActionBooksLength = {
+  type : "SET_BOOKS_LENGTH"
+}
+
 export type Action =
   | ActionWithPayload
   | ActionWithArray
   | ActionWithoutPayload
   | ActionStart
   | ActionSuccess
-  | ActionFailed;
+  | ActionFailed 
+  | ActionBooksLength;
 
 export const bookReducer = (state: InitialState, action: Action) => {
   const { type } = action;
@@ -46,6 +51,8 @@ export const bookReducer = (state: InitialState, action: Action) => {
       return { ...state, books: action.payload };
     case "DELETE_BOOK":
       return {...state, books: state.books.filter(item => {return item.id !== action.payload})}
+    case "SET_BOOKS_LENGTH":
+      return {...state, totalBooks: state.books.length }
     case 'ACTION_START':
       return { ...state, loading: true };
     case 'ACTION_SUCCESS':

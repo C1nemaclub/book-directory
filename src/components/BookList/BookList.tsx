@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { IBook } from '../Book/book.model';
 import Book from '../Book/Book';
 import styled from 'styled-components';
@@ -10,12 +10,11 @@ type BookListProps = {
 };
 
 function BookList({ books, render }: BookListProps) {
-  console.log(books);
-
   return (
     <table id='customers'>
       <tr>
         <th>Title</th>
+        <th>Author</th>
         <th>Price</th>
         <th>Language</th>
         <th>Pages</th>
