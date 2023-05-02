@@ -1,0 +1,23 @@
+#customers {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers th {
+  background: dodgerblue;
+  color: #fff;
+}
+
+#customers tr:nth-child(even) {
+  background: #ccc;
+}
+
+#customers tr:nth-child(odd) {
+  background: #f8f8e6;
+}
+
+#customers th,
+td {
+  padding: 0.5em;
+  text-align: left;
+}

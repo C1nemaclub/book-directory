@@ -1,10 +1,10 @@
 export type IBook = {
   title: string;
-  authors: string[];
+  author: string;
   publicationDate: string;
-  id: string;
   genre: string;
   language: string;
   pageCount: number;
   price: number;
+  id?: string;
 };

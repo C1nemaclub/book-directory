@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../constants';
+import { IBook } from '../components/Book/book.model';
 
 const getBooks = async () => {
   const response = await axios.get(API_URL);
@@ -11,9 +12,14 @@ const removeBook = async (id: string) => {
   return response;
 };
 
+const addBook = async (book: IBook): Promise<IBook> => {
+  return (await axios.post(API_URL, book)).data
+}
+
 const bookService = {
   getBooks,
   removeBook,
+  addBook
 };
 
 export default bookService;

@@ -6,13 +6,17 @@ export type BookProps = IBook & {
 };
 
 function Book(props: BookProps) {
-  const { title, id, onRemove } = props;
+  const { title, id, price, pageCount, language, genre, onRemove } = props;
 
   return (
-    <div>
-      <p>{title}</p>
-      <button onClick={() => onRemove(id)}>Delete</button>
-    </div>
+    <tr>
+      <td>{title}</td>
+      <td>{price}</td>
+      <td>{language}</td>
+      <td>{pageCount}</td>
+      <td>{genre}</td>
+      <td><button onClick={() => onRemove(id)}>Delete</button></td>
+    </tr>
   );
 }
 

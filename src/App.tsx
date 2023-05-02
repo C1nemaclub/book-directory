@@ -5,43 +5,44 @@ import BookList from './components/BookList/BookList';
 import Book from './components/Book/Book';
 import { IBook } from './components/Book/book.model';
 import BookForm from './components/BookForm/BookForm';
+import { FaPlus } from 'react-icons/fa';
 import GlobalStyle from './globalStyles';
 import './App.css';
 
 function App() {
-  const { books, loading, error, removeBook } = useBooks();
+  const [showForm, setShowForm] = useState(false);
+  const { books, loading, error, removeBook, addBook } = useBooks();
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>{error}</h1>;
+  
   return (
     <>
-      <GlobalStyle />
-      <Button>Typescript</Button>
-      <BookForm />
-      <BookList
-        books={books}
-        render={(props: IBook) => (
-          <Book key={props.id} onRemove={removeBook} {...props} />
-        )}
-      />
+      <Container>
+        <GlobalStyle />
+        <BookForm submitForm={addBook} showForm={showForm} onCancel={()=>setShowForm(false)} />
+        <FaPlus onClick={() => setShowForm(true)} className='show-form-icon' />
+        <BookList
+          books={books}
+          render={(props: IBook) => (
+            <Book key={props.id} onRemove={removeBook} {...props} />
+          )}
+        />
+      </Container>
     </>
   );
 }
 
-const Button = styled.button`
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: dodgerblue;
-  cursor: pointer;
-  transition: border-color 0.25s;
-  color: #fff;
-  font-family: 'Roboto', sans-serif;
-  &:hover {
-    border-color: #363636;
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  width: 80%;
+  margin: auto;
+
+  .show-form-icon {
+    font-size: 3rem;
+    color: dodgerblue;
+    cursor: pointer;
   }
 `;
 

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {};
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  ref: any;
+};
 
-function Input(props: InputProps) {
+const Input = (props: InputProps) => {
   return <TextInput {...props} />;
-}
+};
 
 const TextInput = styled.input`
   font-size: max(16px, 1em);

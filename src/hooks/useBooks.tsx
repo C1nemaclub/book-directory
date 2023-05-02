@@ -39,6 +39,17 @@ function useBooks() {
       dispatch({ type: 'ACTION_FAILED', payload: 'There was an error deleting a book' });
     }
   };
+  
+  const addBook = async (book: IBook) => {
+    try{
+      dispatch({ type: 'ACTION_START' });      
+      const response = await bookService.addBook(book)
+      dispatch({type: "ADD_BOOK", payload: response})
+      dispatch({ type: 'ACTION_SUCCESS' });
+    } catch(e){
+      dispatch({ type: 'ACTION_FAILED', payload: 'There was an error creating a book' });
+    }    
+  }
 
   useEffect(() => {
     getBooks();
@@ -47,6 +58,7 @@ function useBooks() {
   return {
     getBooks,
     removeBook,
+    addBook,
     books: state.books,
     loading: state.loading,
     error: state.error,
