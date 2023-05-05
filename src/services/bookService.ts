@@ -16,10 +16,15 @@ const addBook = async (book: IBook): Promise<IBook> => {
   return (await axios.post(API_URL, book)).data
 }
 
+const editBook = async (book: IBook): Promise<any> => {
+  return (await axios.put(`${API_URL}/${book.id}`, book)).data
+}
+
 const bookService = {
   getBooks,
   removeBook,
-  addBook
+  addBook,
+  editBook
 };
 
 export default bookService;

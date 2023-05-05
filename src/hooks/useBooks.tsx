@@ -58,6 +58,18 @@ function useBooks() {
     }    
   }
 
+  const editBook =  async (book: IBook) => {
+    console.log(book);
+    try{
+      dispatch({ type: 'ACTION_START' });   
+      await bookService.editBook(book)
+      getBooks()
+      dispatch({ type: 'ACTION_SUCCESS' });    
+    } catch(e){
+      dispatch({ type: 'ACTION_FAILED', payload: 'Error editing a Book' });
+    }
+  }
+
 
   useEffect(() => {
     getBooks();
@@ -67,6 +79,7 @@ function useBooks() {
     getBooks,
     removeBook,
     addBook,
+    editBook,
     totalBooks: state.totalBooks,
     books: state.books,
     loading: state.loading,

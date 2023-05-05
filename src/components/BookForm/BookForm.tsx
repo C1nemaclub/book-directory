@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IBook } from '../Book/book.model';
 import Button from '../../shared/Button';
-import Modal from 'react-modal'
 
 
 const genres = ['Drama', 'Adventure', 'Romance']
@@ -24,60 +23,42 @@ const bookSchema = yup.object().shape({
 type BookFormProps = {
   submitForm: (book :IBook) => void 
   onCancel: () => void;
-  showForm: boolean
+  defaultValues?: IBook
 }
 
-function BookForm({submitForm, showForm = false, onCancel}: BookFormProps) {
-  const { register,handleSubmit,formState: { errors }, control } = useForm<IBook>({
-    resolver: yupResolver(bookSchema)
+function BookForm({submitForm, onCancel, defaultValues}: BookFormProps) {
+
+  const { register,handleSubmit, formState: { errors } } = useForm<IBook>({
+    resolver: yupResolver(bookSchema), defaultValues
   });
   
-  const onSubmitHandler = (data: any) => {
-    submitForm(data)
-  };
-
-  if(!showForm) return null; 
-
   return (
-    <Container>
-        <FormContainer>
-          <Form onSubmit={handleSubmit(onSubmitHandler)} data-testid="form">
-            <h2>Create a new Book</h2>
-            <div className="row">
-              <div className="left-col col">
-                <Input {...register('title')} placeholder='Title' />
-                <Input {...register('language')} placeholder='Language' />
-                <Input {...register('price')} placeholder='Price' type='number' />
-                <Input {...register('pageCount')} placeholder='Page Amount' type='number' />
+          <FormContainer>
+            <Form onSubmit={handleSubmit(submitForm)} data-testid="form">
+              <h2>Create a new Book</h2>
+              <div className="row">
+                <div className="left-col col">
+                  <Input {...register('title')} placeholder='Title' />
+                  <Input {...register('language')} placeholder='Language' />
+                  <Input {...register('price')} placeholder='Price' type='number' />
+                  <Input {...register('pageCount')} placeholder='Page Amount' type='number' />
+                </div>
+                <div className="right-col col">
+                  <Input {...register('publicationDate')} placeholder='Release Date' type='date' />
+                  <Input {...register('author')} placeholder='Author' />
+                  <Select {...register('genre')} data-testid="genre-select">
+                    {genres.map(genre => <option key={genre}>{genre}</option>)}
+                  </Select>
+                </div>
               </div>
-              <div className="right-col col">
-                <Input {...register('publicationDate')} placeholder='Release Date' type='date' />
-                <Input {...register('author')} placeholder='Author' />
-                <Select {...register('genre')} data-testid="genre-select">
-                  {genres.map(genre => <option key={genre}>{genre}</option>)}
-                </Select>
+              <div className="button-row">
+              <Button type='submit'>{defaultValues ? "Edit" : "Create"}</Button>
+              <Button type="button" className='cancel-btn' onClick={onCancel}>Cancel</Button>
               </div>
-            </div>
-            <div className="button-row">
-            <Button type='submit'>Submit</Button>
-            <Button type="button" className='cancel-btn' onClick={onCancel}>Cancel</Button>
-            </div>
-          </Form>
-        </FormContainer>
-    </Container>
+            </Form>
+          </FormContainer>
   );
 }
-
-const Container = styled.div`
-    position: absolute;
-    width: 100%;
-    max-width: 800px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 5px;
-`
 
 const Form = styled.form`
   width: 100%;

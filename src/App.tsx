@@ -11,21 +11,25 @@ import Modal from 'react-modal'
 import './App.css';
 import Button from './shared/Button';
 
+Modal.setAppElement("#root")
+
 function App() {
-  const [showForm, setShowForm] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalContent, setModalContent] = useState<IBook | null>(null)
-  const { books, loading, error, totalBooks, removeBook, addBook } = useBooks();
+  const [activeBook , setActiveBook] = useState<IBook>()
+  const { books, loading, error, totalBooks, removeBook, addBook, editBook} = useBooks();
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>{error}</h1>;
 
-  const edit = (book: IBook) => {
-    console.log(book);
+  const handleBookEdit = (book: IBook) => {
     setIsModalOpen(true)
-    setModalContent(book)
+    setActiveBook(book)
   }
 
+  const handleBookCreate = () => {
+    setIsModalOpen(true)
+    setActiveBook(undefined)
+  }
 
   const modalStyle = {
     content: {
@@ -41,23 +45,18 @@ function App() {
     }
   };
   
-
   return (
     <>
       <Container>
         <GlobalStyle />
-        <Modal isOpen={isModalOpen} ariaHideApp={false} style={modalStyle} onRequestClose={()=>setIsModalOpen(false)}>
-          <div>
-            <h1>{modalContent?.author}</h1>
-            <Button style={{backgroundColor: 'red'}} onClick={()=>setIsModalOpen(false)}>Close</Button>
-          </div>
+        <Modal isOpen={isModalOpen} onRequestClose={()=>setIsModalOpen(false)} style={modalStyle}>
+          <BookForm defaultValues={activeBook} submitForm={activeBook ? editBook : addBook} onCancel={()=>setIsModalOpen(false)} />
         </Modal>
-        <BookForm submitForm={addBook} showForm={showForm} onCancel={()=>setShowForm(false)} />
-        <FaPlus onClick={() => setShowForm(true)} className='show-form-icon' />
+        <FaPlus onClick={handleBookCreate} className='show-form-icon' />
         <h3>{totalBooks} Books in Total</h3>
         <BookList
           books={books}
-          render={(props: IBook) => (<Book key={props.id} onRemove={removeBook} onEdit={edit} {...props} />)} />
+          render={(props: IBook) => (<Book key={props.id} onRemove={removeBook} onEdit={handleBookEdit} {...props} />)} />
       </Container>
     </>
   );
