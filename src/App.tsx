@@ -10,16 +10,16 @@ import GlobalStyle from './globalStyles';
 import Modal from 'react-modal'
 import './App.css';
 import Button from './shared/Button';
+import Loader from './components/Loader/Loader';
 
 Modal.setAppElement("#root")
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const [activeBook , setActiveBook] = useState<IBook>()
   const { books, loading, error, totalBooks, removeBook, addBook, editBook} = useBooks();
 
-  if (loading) return <h1>Loading...</h1>;
-  if (error) return <h1>{error}</h1>;
 
   const handleBookEdit = (book: IBook) => {
     setIsModalOpen(true)
@@ -30,6 +30,18 @@ function App() {
     setIsModalOpen(true)
     setActiveBook(undefined)
   }
+
+    
+  const handleRemoveModal = (book: IBook) => {
+    setActiveBook(book)
+    setIsConfirmModalOpen(true)
+  }
+
+const handleRemove =  async () => {
+    const res:boolean = await removeBook(activeBook?.id!)
+    if(res) setIsConfirmModalOpen(false)
+}
+  
 
   const modalStyle = {
     content: {
@@ -45,6 +57,7 @@ function App() {
     }
   };
   
+  if(loading) return <Loader />
   return (
     <>
       <Container>
@@ -53,10 +66,18 @@ function App() {
           <BookForm defaultValues={activeBook} submitForm={activeBook ? editBook : addBook} onCancel={()=>setIsModalOpen(false)} />
         </Modal>
         <FaPlus onClick={handleBookCreate} className='show-form-icon' />
+        {error && <h1>{error}</h1>}
         <h3>{totalBooks} Books in Total</h3>
         <BookList
           books={books}
-          render={(props: IBook) => (<Book key={props.id} onRemove={removeBook} onEdit={handleBookEdit} {...props} />)} />
+          render={(props: IBook) => (<Book key={props.id} onRemove={handleRemoveModal} onEdit={handleBookEdit} {...props} />)} />
+          <Modal isOpen={isConfirmModalOpen} onRequestClose={()=>setIsConfirmModalOpen(false)}>
+            <h2>Are you sure you want to delete {activeBook?.title}?</h2>
+            <div className="button-row">
+              <Button onClick={handleRemove}>Yes</Button>
+              <Button onClick={()=>setIsConfirmModalOpen(false)}>No</Button>
+            </div>
+          </Modal>
       </Container>
     </>
   );

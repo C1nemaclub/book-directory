@@ -20,6 +20,7 @@ function BookList({ books, render }: BookListProps) {
         <th>Pages</th>
         <th>Genre</th>
         <th>Delete</th>
+        <th>Edit</th>
       </tr>
       {books.map(render).reverse()}
     </table>
